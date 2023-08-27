@@ -3,7 +3,9 @@ function weatherWidgetInit() {
         CSS_URL: 'https://rawcdn.githack.com/george14051/weatherWidgetScript/63808ee09fcf40f0a660b3fc0f3387b64d1db927/docs/styles.css',
         API_WEATHER_HISTORY_URL: 'https://api.open-meteo.com/v1/forecast',
         API_WEATHER_HISTORY_DAILY_PARAMETERS: '&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=GMT&past_days=31',
-        API_AUTOCOMPLETE_URL: 'https://geocoding-api.open-meteo.com/v1/search'
+        API_AUTOCOMPLETE_URL: 'https://geocoding-api.open-meteo.com/v1/search',
+        COORDINATES_REGEX: /^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/gi,
+        WEEK_DAYS: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     }
 
     const initialautocompleteContainerHtml = `
@@ -32,7 +34,7 @@ function weatherWidgetInit() {
     async function fetchData(url) {
         try {
             const response = await fetch(url);
-
+            console.log('response', response);
             if (!response.ok) {
                 throw new Error(`Request fetchData failed: ${response.status} ${response.statusText}`);
             }
@@ -40,8 +42,9 @@ function weatherWidgetInit() {
             const data = await response.json();
             return data;
         } catch (error) {
-            indicateErrorMessage(false, 'Invalid input');
+            console.log(error);
             console.error('fetchData error:', error);
+            throw error
         }
     }
     async function fetchHistoryWeather(latitude, longitude) {
@@ -49,10 +52,13 @@ function weatherWidgetInit() {
         try {
             const url = `${API_WEATHER_HISTORY_URL}?latitude=${latitude}&longitude=${longitude}${API_WEATHER_HISTORY_DAILY_PARAMETERS}`;
             const historyData = await fetchData(url);
-
+            console.log('historyData', historyData);
             return historyData;
         } catch (error) {
-            console.error('fetchHistoryWeather error:', error);
+
+            checkIfCoordinates(`${latitude},${longitude}`) ? setHelperText(true, 'blue', `dont find data for (${latitude},${longitude})`)
+                : setHelperText(false) & indicateErrorMessage(false, 'Invalid input');
+            throw error;
         }
     }
 
@@ -71,8 +77,10 @@ function weatherWidgetInit() {
     }
 
     async function performAutocomplete(query) {
+        console.log('query', query);
         const { API_AUTOCOMPLETE_URL } = config;
         const data = await fetchData(`${API_AUTOCOMPLETE_URL}?name=${query}&count=10`);
+        console.log('data', data);
         return data;
     }
 
@@ -101,9 +109,7 @@ function weatherWidgetInit() {
         return element;
     }
 
-    async function createWeatherCards(latitude, longitude, searchValue) {
-        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+    async function createWeatherCards(latitude, longitude, searchValue = undefined) {
         try {
             const historyWeather = await fetchHistoryWeather(latitude, longitude);
             displayAutocompleteResults(false);
@@ -117,25 +123,27 @@ function weatherWidgetInit() {
                 card.innerHTML = `
                 <div class="temperature">${avgTemp.maxTemperatureAvg}&deg;C</div>
                 <div class="sub-temperature">${avgTemp.minTemperatureAvg}&deg;C</div>
-                <div class="day">${days[dayIndex]}</div>
+                <div class="day">${config.WEEK_DAYS[dayIndex]}</div>
             `;
                 weatherWidgetState.searchResults.appendChild(card);
             });
         } catch (error) {
-            console.error('createWeatherCards error:', error);
+            throw error;
         }
     }
 
     function calculateAvarageWeather(historyWeather) {
-        let dayTemperatures = Array.from({ length: 7 }, () => ({ maxTemperatureAvg: 0, minTemperatureAvg: 0, count: 0, weathercode: 0 }));
+        let dayTemperatures = Array.from({ length: 7 }, () => ({ maxTemperatureAvg: 0, minTemperatureAvg: 0, count: 0 }));
         // got from the api also forcast of 7 days so removed them.
         historyWeather.time.splice(31);
         historyWeather.time.forEach((date, index) => {
             const dayIndex = new Date(date).getDay();
-            dayTemperatures[dayIndex].maxTemperatureAvg += historyWeather.temperature_2m_max[index];
-            dayTemperatures[dayIndex].minTemperatureAvg += historyWeather.temperature_2m_min[index];
-            dayTemperatures[dayIndex].count++;
-            dayTemperatures[dayIndex].weathercode = historyWeather.weathercode[index];
+            const { maxTemperatureAvg, minTemperatureAvg, count } = dayTemperatures[dayIndex];
+            dayTemperatures[dayIndex] = {
+                maxTemperatureAvg: maxTemperatureAvg + historyWeather.temperature_2m_max[index],
+                minTemperatureAvg: minTemperatureAvg + historyWeather.temperature_2m_min[index],
+                count: count + 1
+            }
         })
 
         const averageTemperatures = dayTemperatures.map(({ maxTemperatureAvg, minTemperatureAvg, count }) => ({
@@ -147,11 +155,10 @@ function weatherWidgetInit() {
     }
 
     function checkIfCoordinates(value) {
-        const regexExpCoordinates = /^((\-?|\+?)?\d+(\.\d+)?),\s*((\-?|\+?)?\d+(\.\d+)?)$/gi;
+        const regexExpCoordinates = config.COORDINATES_REGEX;
         const trimmedValue = value.split(" ").join("");
         return regexExpCoordinates.test(trimmedValue)
     }
-
 
 
     //check if the target website have fixed header and add top to the injected element
@@ -188,11 +195,18 @@ function weatherWidgetInit() {
         try {
             const { autocompleteResultsData, inputType, autocompleteInput } = weatherWidgetState;
             const inputLen = autocompleteInput.value.trim().length;
+            console.log(autocompleteInput.value);
+            console.log(inputValue);
+            console.log(inputType);
             switch (inputType) {
                 case 'string': {
                     if (autocompleteResultsData?.length > 0) {
-                        const selectedOption = autocompleteResultsData[suggestedIndex];
-                        await createWeatherCards(selectedOption.latitude, selectedOption.longitude, selectedOption.name);
+                        if (suggestedIndex === -1) {
+                            indicateErrorMessage(false, 'type new input for other location');;
+                        } else {
+                            const selectedOption = autocompleteResultsData[suggestedIndex];
+                            await createWeatherCards(selectedOption.latitude, selectedOption.longitude, selectedOption.name);
+                        }
                     } else {
                         indicateErrorMessage(false);
                     }
@@ -201,7 +215,9 @@ function weatherWidgetInit() {
                 case 'coordinates': {
                     setHelperText(false);
                     const [latitude, longitude] = inputValue.split(',').map(coordinate => coordinate.trim());
-                    await createWeatherCards(latitude, longitude, inputValue);
+                    console.log('latitude', latitude);
+                    console.log('longitude', longitude);
+                    await createWeatherCards(latitude, longitude);
                     break;
                 }
                 default: {
@@ -312,12 +328,12 @@ function weatherWidgetInit() {
 
 
 
-    function setInputTypeState(inputLen, isCoordiantion, value, prevInput) {
+    function setInputTypeState(inputLen, isCoordiantion, value) {
         let type;
         if (inputLen) {
             if (isCoordiantion) {
                 type = 'coordinates';
-            } else if (isNaN(value)) {
+            } else if (isNaN(value[0])) {
                 type = 'string';
             } else {
                 type = 'number';
@@ -329,7 +345,7 @@ function weatherWidgetInit() {
         return type;
     }
 
-    function setHelperText(show, color = 'blue', message = 'Example - 43.03333 , 17.64306') {
+    function setHelperText(show, color = 'blue', message = 'coordinates format ex. - 43.03333 , 17.64306') {
         const { helperText } = weatherWidgetState;
 
         if (show) {
@@ -346,10 +362,14 @@ function weatherWidgetInit() {
         const inputValue = autocompleteInput.value.trim().toLowerCase();
 
         indicateErrorMessage(true);
+        setHelperText(false);
 
         const inputLen = inputValue.length
         //set inputType
+        console.log('inputValue', inputValue)
         const currInputType = setInputTypeState(inputLen, checkIfCoordinates(inputValue), inputValue)
+
+        console.log('currInputType', currInputType)
 
 
         switch (currInputType) {
@@ -360,11 +380,12 @@ function weatherWidgetInit() {
                 break;
             }
             case 'coordinates': {
-                indicateErrorMessage(false);
-                setHelperText(true);
+                indicateErrorMessage(true);
+                setHelperText(true, 'green');
                 break;
             }
             case 'number': {
+                indicateErrorMessage(true);
                 setHelperText(true);
                 break;
             }
@@ -400,12 +421,13 @@ function weatherWidgetInit() {
         } else if (event.key === "Enter") {
             event.preventDefault();
             const inputValue = autocompleteInput.value.trim();
-            handleSearchSubmit(inputValue, weatherWidgetState.selectedSuggestionIndex);
+            await handleSearchSubmit(inputValue, weatherWidgetState.selectedSuggestionIndex);
+            weatherWidgetState.selectedSuggestionIndex = -1;
         }
 
     }
 
-    async function clearButtonClickHandler(event) {
+    function clearButtonClickHandler(event) {
         const { helperText, autocompleteInput, autocompleteResults, searchResults } = weatherWidgetState;
         event.preventDefault();
         indicateErrorMessage(true);
@@ -421,10 +443,10 @@ function weatherWidgetInit() {
         const { autocompleteInput } = weatherWidgetState;
         event.preventDefault();
         const inputValue = autocompleteInput.value;
-        handleSearchSubmit(inputValue, 0);
+        handleSearchSubmit(inputValue, -1);
     }
 
-    async function addAsyncHandlerEvent(element, event, handler) {
+    function addHandlerEvent(element, event, handler) {
         element.addEventListener(event, handler)
     }
 
@@ -470,10 +492,10 @@ function weatherWidgetInit() {
         // weatherWidgetState.autocompleteResultsData = []
 
         //add event handlers to components
-        addAsyncHandlerEvent(autocompleteInput, "input", inputChangeHandler);
-        addAsyncHandlerEvent(autocompleteInput, "keydown", onInputKeyDownHandler)
-        addAsyncHandlerEvent(searchButton, "click", searchButtonClickHandler)
-        addAsyncHandlerEvent(clearButton, "click", clearButtonClickHandler)
+        addHandlerEvent(autocompleteInput, "input", inputChangeHandler);
+        addHandlerEvent(autocompleteInput, "keydown", onInputKeyDownHandler)
+        addHandlerEvent(searchButton, "click", searchButtonClickHandler)
+        addHandlerEvent(clearButton, "click", clearButtonClickHandler)
 
     };
 
