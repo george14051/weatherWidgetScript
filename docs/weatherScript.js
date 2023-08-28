@@ -8,13 +8,10 @@ function weatherWidgetScript() {
         WEEK_DAYS: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     }
 
-
-
-
     const commonState = {
         componentAmount: 0,
         isInitialRun: true,
-        targetInjectionDivId: document.currentScript.getAttribute('targetDiv')
+        targetInjectionDivId: document.currentScript?.getAttribute('targetDiv')
     };
 
     return function createWeatherWidgetInstance(divid) {
