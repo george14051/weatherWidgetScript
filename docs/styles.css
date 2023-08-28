@@ -1,131 +1,130 @@
 .weather-widget {
   z-index: 999999;
   width: 100%;
+}
+.autocomplete-top-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
 
-  .autocomplete-top-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: white;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-  }
+.autocomplete-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 9999;
+  width: 90%;
+}
 
-  .autocomplete-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 1000px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 9999;
-    width: 90%;
-  }
+.autocomplete-input {
+  flex: 1;
+  padding: 6px;
+  width: 100%;
+  border: unset;
+  border-radius: 4px;
+}
+.autocomplete-input:focus-visible {
+  outline: unset;
+}
 
-  .autocomplete-input {
-    flex: 1;
-    padding: 6px;
-    width: 100%;
-    border: unset;
-    border-radius: 4px;
-  }
-  .autocomplete-input:focus-visible {
-    outline: unset;
-  }
+.search-button {
+  background-color: #007bff;
+  color: white;
+}
+.btnWeather {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.clear-button {
+  background-color: #ace2ff;
+  color: black;
+}
 
-  .search-button {
-    background-color: #007bff;
-    color: white;
-  }
-  .btnWeather {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  .clear-button {
-    background-color: #ace2ff;
-    color: black;
-  }
+.search-button:hover {
+  background-color: #0056b3;
+}
 
-  .search-button:hover {
-    background-color: #0056b3;
-  }
+/* Styles for autocomplete results list */
+.autocomplete-results {
+  width: 100%;
+  border-radius: 4px;
+  background-color: white;
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  padding-inline-start: 0;
+}
 
-  /* Styles for autocomplete results list */
-  .autocomplete-results {
-    width: 100%;
-    border-radius: 4px;
-    background-color: white;
-    list-style: none;
-    padding: 6px;
-    margin: 0;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    padding-inline-start: 0;
-  }
+.listItem {
+  border: 1px solid #ccc;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
 
-  .listItem {
-    border: 1px solid #ccc;
-    padding: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
+.listItem:hover {
+  background-color: #477cae; /* Change to your desired hover background color */
+}
 
-  .listItem:hover {
-    background-color: #477cae; /* Change to your desired hover background color */
-  }
+.selected {
+  background-color: #3498db; /* Change to your desired selected background color */
+  color: white; /* Change to your desired text color */
+}
 
-  .selected {
-    background-color: #3498db; /* Change to your desired selected background color */
-    color: white; /* Change to your desired text color */
-  }
+.search-results {
+  background-image: url("./white-cloud-blue-sky.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 
-  .search-results {
-    background-image: url("./white-cloud-blue-sky.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: repeat;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
+.helper-text {
+  background-color: white;
+}
+.error-message {
+  background-color: white;
+}
 
-  .helper-text {
-    background-color: white;
-  }
-  .error-message {
-    background-color: white;
-  }
+.weather-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 120px;
+  margin: 8px;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .weather-card {
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 16px;
-    min-width: 120px;
-    margin: 8px;
-    text-align: center;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  }
+.weather-card .temperature {
+  font-size: 24px;
+  font-weight: bold;
+}
 
-  .weather-card .temperature {
-    font-size: 24px;
-    font-weight: bold;
-  }
+.weather-card .sub-temperature {
+  font-size: 12px;
+  color: #999;
+}
 
-  .weather-card .sub-temperature {
-    font-size: 12px;
-    color: #999;
-  }
-
-  .weather-card .day {
-    margin-top: 8px;
-    font-weight: bold;
-  }
+.weather-card .day {
+  margin-top: 8px;
+  font-weight: bold;
 }
