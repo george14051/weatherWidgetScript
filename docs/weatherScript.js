@@ -490,13 +490,13 @@ function weatherWidgetScript() {
 
         (async function runWeatherWidgetScript() {
 
-            const { targetInjectionDiv, isInitalRun, componentAmount } = commonState;
+            const { targetInjectionDiv, isInitialRun, componentAmount } = commonState;
 
             let selfIndex = componentAmount;
             commonState.componentAmount = componentAmount + 1;
 
             //check if initial run
-            if (isInitalRun) {
+            if (isInitialRun) {
                 // add css link tag to target HTML
                 const link = createLinkTag('stylesheet', 'text/css', config.CSS_URL);
                 document.head.appendChild(link);
