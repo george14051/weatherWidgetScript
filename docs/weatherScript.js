@@ -459,8 +459,7 @@ function weatherWidgetScript() {
 
         async function widjetInjection(targetElement, targetElementStyles, widgetElement) {
             addDragAndDrop(widgetElement);
-
-            if (targetElement) {
+            if (targetElement !== document.body) {
                 widgetElement.style.position = 'relative';
                 targetElement.insertBefore(widgetElement, targetElement.firstChild);
             } else {
@@ -519,9 +518,6 @@ function weatherWidgetScript() {
 
 
             // get and inject the widget element to target
-            // const targetElement = getElementById(weatherWidgetState.targetInjectionDiv)
-            // await widjetInjection(targetElement, wrapperDiv);
-            // await widjetInjection(targetElement, wrapperDiv);
             const { targetDivId } = weatherWidgetState;
             const targetElement = getTargetElement(targetDivId);
             const targetElementStyles = getComputedStyle(targetElement);
