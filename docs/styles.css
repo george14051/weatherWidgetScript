@@ -1,124 +1,131 @@
-#autocomplete-top-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-}
-
-#weather-widget {
+.weather-widget {
   z-index: 999999;
   width: 100%;
-}
 
-#autocomplete-container {
-  display: flex;
-  flex-direction: column;
-  max-width: 1000px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 9999;
-  width: 90%;
-}
+  .autocomplete-top-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
 
-#autocomplete-input {
-  flex: 1;
-  padding: 6px;
-  width: 100%;
-  border: unset;
-  border-radius: 4px;
-}
-#autocomplete-input:focus-visible {
-  outline: unset;
-}
+  .autocomplete-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 9999;
+    width: 90%;
+  }
 
-#search-button {
-  background-color: #007bff;
-  color: white;
-}
-.btnWeather {
-  padding: 6px 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-#clear-button {
-  background-color: #ace2ff;
-  color: black;
-}
+  .autocomplete-input {
+    flex: 1;
+    padding: 6px;
+    width: 100%;
+    border: unset;
+    border-radius: 4px;
+  }
+  .autocomplete-input:focus-visible {
+    outline: unset;
+  }
 
-#search-button:hover {
-  background-color: #0056b3;
-}
+  .search-button {
+    background-color: #007bff;
+    color: white;
+  }
+  .btnWeather {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .clear-button {
+    background-color: #ace2ff;
+    color: black;
+  }
 
-/* Styles for autocomplete results list */
-#autocomplete-results {
-  width: 100%;
-  border-radius: 4px;
-  background-color: white;
-  list-style: none;
-  padding: 6px;
-  margin: 0;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  padding-inline-start: 0;
-}
+  .search-button:hover {
+    background-color: #0056b3;
+  }
 
-.listItem {
-  border: 1px solid #ccc;
-  padding: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+  /* Styles for autocomplete results list */
+  .autocomplete-results {
+    width: 100%;
+    border-radius: 4px;
+    background-color: white;
+    list-style: none;
+    padding: 6px;
+    margin: 0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding-inline-start: 0;
+  }
 
-.listItem:hover {
-  background-color: #477cae; /* Change to your desired hover background color */
-}
+  .listItem {
+    border: 1px solid #ccc;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
 
-.selected {
-  background-color: #3498db; /* Change to your desired selected background color */
-  color: white; /* Change to your desired text color */
-}
+  .listItem:hover {
+    background-color: #477cae; /* Change to your desired hover background color */
+  }
 
-#search-results {
-  background-image: url("./white-cloud-blue-sky.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
+  .selected {
+    background-color: #3498db; /* Change to your desired selected background color */
+    color: white; /* Change to your desired text color */
+  }
 
-.weather-card {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 16px;
-  min-width: 120px;
-  margin: 8px;
-  text-align: center;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
+  .search-results {
+    background-image: url("./white-cloud-blue-sky.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 
-.weather-card .temperature {
-  font-size: 24px;
-  font-weight: bold;
-}
+  .helper-text {
+    background-color: white;
+  }
+  .error-message {
+    background-color: white;
+  }
 
-.weather-card .sub-temperature {
-  font-size: 12px;
-  color: #999;
-}
+  .weather-card {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 120px;
+    margin: 8px;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-.weather-card .day {
-  margin-top: 8px;
-  font-weight: bold;
+  .weather-card .temperature {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .weather-card .sub-temperature {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .weather-card .day {
+    margin-top: 8px;
+    font-weight: bold;
+  }
 }
