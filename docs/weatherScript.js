@@ -498,8 +498,8 @@ function weatherWidgetScript() {
             //check if initial run
             if (isInitalRun) {
                 // add css link tag to target HTML
-                // const link = createLinkTag('stylesheet', 'text/css', config.CSS_URL);
-                // document.head.appendChild(link);
+                const link = createLinkTag('stylesheet', 'text/css', config.CSS_URL);
+                document.head.appendChild(link);
                 commonState.isInitialRun = false;
                 setLocalState({ targetDivId: targetInjectionDiv })
             }
