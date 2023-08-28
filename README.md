@@ -12,11 +12,13 @@ To use the weather widget, follow these steps:
 
    ```javascript
    var script = document.createElement('script');
-   script.src = 'https://rawcdn.githack.com/george14051/weatherWidgetScript/4977251beb45dce10d1b713482d395cee4ed3b20/docs/weatherScript.js';
+   script.src = 'https://george14051.github.io/weatherWidgetScript/weatherScript.js';
    script.type = 'text/javascript';
    script.async = true;
    script.setAttribute("targetDiv", "id-of-your-target");
    document.body.appendChild(script);
+
+3. after initial script run use on the browser console the function weatherWidgetInit("id-of-your-target") for inject more widgets to the page.
 
 ##  Notes
 
