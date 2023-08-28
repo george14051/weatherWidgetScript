@@ -513,7 +513,7 @@ function weatherWidgetScript() {
 
             // Create the autocomplete element
             const autocompleteContainer = createElement('div', `autocomplete-container${selfIndex}`, createAutoCompleteContainerHtml())
-            autocompleteContainer.classList.add('weather-autocomplete-container');
+            autocompleteContainer.classList.add('autocomplete-container');
             wrapperDiv.appendChild(autocompleteContainer);
 
 
