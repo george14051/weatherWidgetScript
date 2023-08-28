@@ -1,6 +1,6 @@
 function weatherWidgetScript() {
     const config = {
-        CSS_URL: './styles.css',
+        CSS_URL: 'https://george14051.github.io/weatherWidgetScript/styles.css',
         API_WEATHER_HISTORY_URL: 'https://api.open-meteo.com/v1/forecast',
         API_WEATHER_HISTORY_DAILY_PARAMETERS: '&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=GMT&past_days=31',
         API_AUTOCOMPLETE_URL: 'https://geocoding-api.open-meteo.com/v1/search',
