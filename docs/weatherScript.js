@@ -463,7 +463,7 @@ function weatherWidgetScript() {
                 widgetElement.style.position = 'relative';
                 targetElement.insertBefore(widgetElement, targetElement.firstChild);
             } else {
-                widgetElement.style.position = "sticky";
+                widgetElement.style.position = "fixed";
                 document.body.insertBefore(widgetElement, document.body.firstChild);
                 addTopIfOtherHeaders(widgetElement);
             }
